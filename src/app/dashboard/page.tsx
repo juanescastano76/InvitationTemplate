@@ -1,7 +1,8 @@
 import React from "react";
+import UserData from "../components/UserData";
 
 function page() {
-  return <div>page</div>;
+  return <UserData />;
 }
 
 export default page;

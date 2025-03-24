@@ -24,9 +24,9 @@ export async function POST(req: Request) {
 
     // Crear y guardar usuario en MongoDB
     const newUser = new User({
+      name,
       email,
       password: hashedPassword,
-      name,
       phoneNumber,
 
       createdAt: new Date(),

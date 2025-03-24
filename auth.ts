@@ -1,18 +1,9 @@
-// import NextAuth from "next-auth";
-// import { MongoDBAdapter } from "@auth/mongodb-adapter";
-// import client from "@/lib/db";
-// export const { handlers, auth, signIn, signOut } = NextAuth({
-//   adapter: MongoDBAdapter(client),
-
-//   providers: [],
-
-// });
-
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 // Your own logic for dealing with plaintext password strings; be careful!
 import saltAndHashPassword from "@/lib/utils";
-import { connectDB } from "@/lib/mongodb";
+import credentials from "next-auth/providers/credentials";
+import getDataFromDB from "@/lib/getDataFromDB";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -23,22 +14,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials: any) => {
         let user = null;
-
+        let password = credentials.password;
         // logic to salt and hash password
-        const pwHash = saltAndHashPassword(credentials.password);
 
-        // logic to verify if the user exists
-        user = await connectDB(credentials.email, pwHash);
+        let userEmail: string = credentials.email;
+
+        user = await getDataFromDB(userEmail, password);
+        console.log("usuario front", user);
 
         if (!user) {
           // No user found, so this is their first attempt to login
           // Optionally, this is also the place you could do a user registration
-          throw new Error("Invalid credentials.");
+          // throw new Error("Invalid credentials.");
+          console.log("error");
         }
 
         // return user object with their profile data
+        console.log("usuario logueado");
+
         return user;
       },
     }),

@@ -1,53 +1,70 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-export default function SignIn() {
-  const [error, setError] = useState("");
+function page() {
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
+
   const router = useRouter();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const res = await signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
-      redirect: false,
+  const handleLogIn = (e: any) => {
+    e.preventDefault();
+    console.log(userEmail);
+    console.log(userPassword);
+    signIn("credentials", {
+      email: userEmail,
+      password: userPassword,
+      redirect: true,
+      callbackUrl: "/dashboard",
     });
-
-    if (res?.error) setError(res.error as string);
   };
 
   return (
-    <div className="justify-center h-[calc(100vh-4rem)] flex items-center">
+    <div className="text-center">
+      <h1>Iniciar sesion</h1>
       <form
-        onSubmit={handleSubmit}
-        className="bg-neutral-950 px-8 py-10 w-3/12"
+        action=""
+        onSubmit={handleLogIn}
+        className="bg-gray-400 text-black flex flex-col items-center my-10"
       >
-        {error && <div className="bg-red-500 text-white p-2 mb-2">{error}</div>}
-        <h1 className="text-4xl font-bold mb-7">Signin</h1>
+        <div className="flex flex-col ">
+          <div className="flex flex-col">
+            <label htmlFor="email">email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="bg-amber-200"
+              onChange={(e) => {
+                setUserEmail(e.target.value);
+              }}
+            />
+          </div>
 
-        <label className="text-slate-300">Email:</label>
-        <input
-          type="email"
-          placeholder="Email"
-          className="bg-zinc-800 px-4 py-2 block mb-2 w-full"
-          name="email"
-        />
+          <div className="flex flex-col">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="bg-amber-200"
+              onChange={(e) => {
+                setUserPassword(e.target.value);
+              }}
+            />
+          </div>
+        </div>
 
-        <label className="text-slate-300">Password:</label>
-        <input
-          type="password"
-          placeholder="Password"
-          className="bg-zinc-800 px-4 py-2 block mb-2 w-full"
-          name="password"
-        />
-
-        <button className="bg-blue-500 text-white px-4 py-2 block w-full mt-4">
-          Signup
-        </button>
+        <div className="my-10">
+          <button type="submit" className="bg-amber-200 px-10">
+            Send
+          </button>
+        </div>
       </form>
     </div>
   );
 }
+
+export default page;
