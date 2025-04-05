@@ -6,24 +6,37 @@ import React, { useEffect, useState } from "react";
 function page() {
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const router = useRouter();
 
-  const handleLogIn = (e: any) => {
+  const handleLogIn = async (e: any) => {
     e.preventDefault();
-    console.log(userEmail);
-    console.log(userPassword);
-    signIn("credentials", {
+
+    if (!userEmail.trim() || !userPassword.trim()) {
+      setErrorMessage("Por favor, completa todos los campos.");
+      return;
+    }
+
+    const res = await signIn("credentials", {
       email: userEmail,
       password: userPassword,
-      redirect: true,
+      redirect: false,
       callbackUrl: "/dashboard",
     });
+
+    console.log(res);
+    if (res?.error) {
+      setErrorMessage(res.error);
+    } else if (res?.ok && !res.error) {
+      router.push("/dashboard");
+    }
   };
 
   return (
     <div className="text-center">
       <h1>Iniciar sesion</h1>
+      <p className="text-red-500 text-3xl">{errorMessage}</p>
       <form
         action=""
         onSubmit={handleLogIn}

@@ -10,6 +10,7 @@ function Navbar() {
       <p>navrbar</p>
       <Link href="/log-in">Log In</Link>
       <Link href="/sign-up">Sign Up</Link>
+      <button onClick={() => signOut()}>Sign Out</button>
     </div>
   );
 }

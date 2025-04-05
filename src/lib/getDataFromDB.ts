@@ -1,6 +1,7 @@
-import User from "@/models/User";
+import User from "../models/User";
 import { connectDB } from "./mongodb";
-import { compareHashedPasswords } from "@/lib/utils";
+import { compareHashedPasswords } from "./utils";
+import { Error } from "mongoose";
 
 async function getDataFromDB(email: string, plainPassword: string) {
   try {
@@ -9,22 +10,22 @@ async function getDataFromDB(email: string, plainPassword: string) {
     const user = await User.findOne({ email }).lean();
 
     if (!user) {
-      console.log("❌ Usuario no encontrado");
       return null;
     }
 
+    console.log(user);
     const isPasswordCorrect = await compareHashedPasswords(
       plainPassword,
       user.password
     );
 
     if (!isPasswordCorrect) {
-      console.log("❌ Contraseña incorrecta");
-      return null;
+      throw new Error("Contraseña incorrecta");
     }
-
+    console.log(user);
     // ✅ Usuario y contraseña correctos
     return {
+      id: user._id.toString(), // necesario
       email: user.email,
       name: user.name,
     };

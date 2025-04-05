@@ -1,7 +1,15 @@
-import type { NextConfig } from "next";
+import { NextConfig } from "next";
 
+// next.config.js
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        "@/*": ["./*"],
+      },
+    },
+    serverActions: true,
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
