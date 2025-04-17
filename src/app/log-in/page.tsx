@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function page() {
@@ -73,6 +73,19 @@ function page() {
         <div className="my-10">
           <button type="submit" className="bg-amber-200 px-10">
             Send
+          </button>
+        </div>
+
+        <div>
+          <h2>Iniciar sesion con google</h2>
+          <button
+            onClick={() =>
+              signIn("google", {
+                callbackUrl: "/dashboard",
+              })
+            }
+          >
+            Google
           </button>
         </div>
       </form>
