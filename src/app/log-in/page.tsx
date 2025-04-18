@@ -2,6 +2,7 @@
 import { signIn } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import GoogleSignIn from "../components/GoogleSignIn";
 
 function page() {
   const [userEmail, setUserEmail] = useState<string>("");
@@ -77,16 +78,7 @@ function page() {
         </div>
 
         <div>
-          <h2>Iniciar sesion con google</h2>
-          <button
-            onClick={() =>
-              signIn("google", {
-                callbackUrl: "/dashboard",
-              })
-            }
-          >
-            Google
-          </button>
+          <GoogleSignIn text="Iniciar sesion con Google" />
         </div>
       </form>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import GoogleSignIn from "../components/GoogleSignIn";
 
 function page() {
   const [userEmail, setUserEmail] = useState<string>("");
@@ -112,6 +113,7 @@ function page() {
             Send
           </button>
         </div>
+        <GoogleSignIn text="Registrate con Google" />
       </form>
     </div>
   );

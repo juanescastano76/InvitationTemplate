@@ -7,6 +7,7 @@ interface IUser extends Document {
   phoneNumber: number;
   webPageName?: string;
   createdAt: Date;
+  emailVerified?: Date | null;
 }
 
 const userSchema = new Schema<IUser>({
@@ -16,6 +17,7 @@ const userSchema = new Schema<IUser>({
   phoneNumber: { type: Number, required: true },
   webPageName: { type: String },
   createdAt: { type: Date, default: Date.now, required: true },
+  emailVerified: { type: Date, default: null },
 });
 
 // ✅ Esto evita el error OverwriteModelError
