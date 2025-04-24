@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import User from "../../../../models/User";
 import console from "console";
 import { connectDB } from "../../../../lib/mongodb";
+import generateVerificationTokens from "../../../../lib/tokens";
 
 export async function POST(req: Request) {
   try {
@@ -34,10 +35,14 @@ export async function POST(req: Request) {
 
     await newUser.save(); // Guarda en la base de datos
 
+    const verificationToken = await generateVerificationTokens(email);
+
     // console.log("✅ Usuario guardado en MongoDB:", newUser);
 
     return NextResponse.json(
-      { message: "Usuario creado correctamente" },
+      {
+        message: "Usuario creado correctamente, verificacion de correo enviada",
+      },
       { status: 201 }
     );
   } catch (error) {
