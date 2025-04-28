@@ -4,7 +4,7 @@ import User from "../../../../models/User";
 import console from "console";
 import { connectDB } from "../../../../lib/mongodb";
 import generateVerificationTokens from "../../../../lib/tokens";
-
+import sendEmailVerificationToken from "../../../../actions/SendEmailVerificationToken";
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -34,8 +34,14 @@ export async function POST(req: Request) {
     });
 
     await newUser.save(); // Guarda en la base de datos
+    console.log("usuario registrado");
 
     const verificationToken = await generateVerificationTokens(email);
+    console.log("verification token", verificationToken.token);
+    sendEmailVerificationToken(
+      "juanescastano76@gmail.com",
+      verificationToken.token
+    );
 
     // console.log("✅ Usuario guardado en MongoDB:", newUser);
 
